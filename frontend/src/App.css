@@ -1,0 +1,47 @@
+#root {
+  margin: 0;
+  padding: 0;
+}
+
+/* Add the highlight animation for section focus */
+@keyframes highlight-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(22, 160, 133, 0);
+  }
+  50% {
+    box-shadow: 0 0 0 20px rgba(22, 160, 133, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(22, 160, 133, 0);
+  }
+}
+
+.highlight-section {
+  animation: highlight-pulse 1.5s ease-in-out;
+  transition: all 0.3s ease;
+  background-color: #e0f2f1 !important;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) translateX(0);
+  }
+  25% {
+    transform: translateY(-15px) translateX(8px);
+  }
+  50% {
+    transform: translateY(0) translateX(15px);
+  }
+  75% {
+    transform: translateY(15px) translateX(8px);
+  }
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+}
+
+/* Highlight effect for scroll navigation */
+.highlight-section {
+  animation: highlight-pulse 1.5s ease-in-out;
+}
+

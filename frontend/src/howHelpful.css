@@ -1,0 +1,13 @@
+.cardContainer{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    background-color: #F5F7FA;
+    padding: 2rem 0;
+}.cardContainer{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+}
