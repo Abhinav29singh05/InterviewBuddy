@@ -17,6 +17,10 @@ app.use(cors());
 app.use(express.json());
 
 // Add this before MongoDB connection attempt
+app.get('/', (req, res) => {
+  res.send('Interview Buddy API is running');
+});
+
 app.get('/api/status', (req, res) => {
   res.json({ status: 'API running', env: process.env.NODE_ENV });
 });
