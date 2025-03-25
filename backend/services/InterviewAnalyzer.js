@@ -8,6 +8,9 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
  */
 router.post('/analyzeInterview', async (req, res) => {
     try {
+        console.log('Analysis request received:', new Date().toISOString());
+        const startTime = Date.now();
+        
         const { questions, recordings, jobDescription } = req.body;
         
         if (!questions || !recordings || !jobDescription) {
@@ -61,6 +64,9 @@ router.post('/analyzeInterview', async (req, res) => {
         `;
         
         try {
+            // Before Gemini API call
+            console.log('Calling Gemini API:', new Date().toISOString(), 'Elapsed:', (Date.now() - startTime) + 'ms');
+            
             // Call Gemini API for analysis
             const result = await model.generateContent(prompt);
             const response = await result.response;
@@ -107,6 +113,11 @@ router.post('/analyzeInterview', async (req, res) => {
                 
                 // Log successful analysis
                 // console.log('Final analysis being sent to frontend:', JSON.stringify(analysis, null, 2));
+                
+                // After Gemini API call
+                console.log('Gemini API response received:', new Date().toISOString(), 'Elapsed:', (Date.now() - startTime) + 'ms');
+                
+                console.log('Analysis complete:', new Date().toISOString(), 'Total time:', (Date.now() - startTime) + 'ms');
                 return res.json(analysis);
             } catch (parseError) {
                 console.error('Error parsing Gemini response:', parseError);
@@ -169,12 +180,12 @@ router.post('/analyzeInterview', async (req, res) => {
         }
         
     } catch (error) {
-        console.error('Error analyzing interview:', error);
-        res.status(500).json({ error: 'Failed to analyze interview' });
+        console.error('Error analyzing interview:', error, 'Time elapsed:', (Date.now() - startTime) + 'ms');
+        res.status(500).json({ error: 'Failed to analyze interview', message: error.message });
     }
 });
 
-// Function to clean JSON string
+// Function to clean JSON stringl
 const cleanJsonString = (str) => {
   try {
     // Remove markdown code block markers if present
