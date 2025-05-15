@@ -1,5 +1,5 @@
 import './navbar.css'
-import Button from './Button'
+import Button from './Button.jsx'
 import { useNavigate, useLocation } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
