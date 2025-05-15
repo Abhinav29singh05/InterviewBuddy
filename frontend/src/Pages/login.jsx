@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { authAPI } from "../services/api";
 import { useAuth } from "../services/authContext";
-import Button from "../Button";
+import Button from "../Button.jsx";
 
 const Login = () => {
     const [email, setEmail] = useState('');
