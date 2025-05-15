@@ -14,7 +14,7 @@ router.post('/questionGenerator', async (req, res) => {
         }
         const genAI = new GoogleGenerativeAI(API_KEY);
         const model = genAI.getGenerativeModel({
-            model: "gemini-1.5-pro",
+            model: "gemini-2.0-flash",
         });
         const prompt = `Based on the following job description, generate 1 technical interview questions that would be appropriate for this role. Format the response as a JSON array of strings containing only the questions:
         Job Description: ${jobDescription}`;

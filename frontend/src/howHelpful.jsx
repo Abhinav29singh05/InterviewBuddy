@@ -9,7 +9,7 @@ const HowHelpful = () =>{
     return(
         <div className="p-[2rem]">
             <h2 className="text-4xl font-semibold mb-4 pb-[1rem] text-[#4A3D2A]" align="center">How helpful is this tool?</h2>
-            <div className="cardContainer flex justify-evenly items-center flex-wrap">
+            <div className="cardContainer flex justify-evenly gap-4 items-center flex-wrap">
                 <HelpCard img={book} heading="Work on Real World Problems" 
                 content="Practise Interview Questions from top tech companies & take your preparation to the next level"/>
                 <HelpCard img={feedback} heading="Get Instant Feedback"

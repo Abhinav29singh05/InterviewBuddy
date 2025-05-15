@@ -4,13 +4,19 @@ import { interviewAPI } from '../services/api';
 
 // Helper function to format improvement tips
 const formatImprovementTips = (tips) => {
+  // Return empty array if tips is null, undefined, or not provided
   if (!tips) return [];
   
+  // Convert tips to string if it's not already a string
+  // This prevents "tips.match is not a function" error
+  const tipsStr = typeof tips === 'string' ? tips : String(tips);
+  
   // Check if tips already contain numbered points (1., 2., etc.)
-  if (tips.match(/\d+\.\s+\*\*[^*]+\*\*/)) {
+  // Added null/type checking to prevent "match is not a function" error
+  if (typeof tipsStr === 'string' && tipsStr.match && tipsStr.match(/\d+\.\s+\*\*[^*]+\*\*/)) {
     console.log("formatting");
     // Split by numbered points and filter empty entries
-    const points = tips.split(/(\d+\.\s+)/)
+    const points = tipsStr.split(/(\d+\.\s+)/)
       .filter(point => point.trim())
       .map(point => {
         // Clean up the point
@@ -32,7 +38,7 @@ const formatImprovementTips = (tips) => {
   }
   
   // For tips without clear formatting, just return as a single item
-  return [tips];
+  return [tipsStr];
 };
 
 const Analytics = () => {
@@ -47,10 +53,19 @@ const Analytics = () => {
   const questions = location.state?.questions || [];
   const jobDescription = location.state?.jobDescription || location.state?.interviewData?.jobDescription || "Please provide a job description";
   
+  // Log location state for debugging
+  useEffect(() => {
+    console.log("Location state:", location.state);
+    console.log("Interview data:", interviewData);
+    console.log("Questions:", questions);
+    console.log("Job description:", jobDescription);
+  }, [location, interviewData, questions, jobDescription]);
+  
   // Fetch analysis from Gemini when component mounts
   useEffect(() => {
     // Check if we have interview data
     if (!interviewData) {
+      console.error("No interview data found");
       setError("No interview data found. Please complete an interview first.");
       setLoading(false);
       return;
@@ -58,6 +73,7 @@ const Analytics = () => {
 
     // Check if we have recordings
     if (!interviewData.recordings || interviewData.recordings.length === 0) {
+      console.error("No interview recordings found");
       setError("No interview recordings found. Please complete the interview questions.");
       setLoading(false);
       return;
@@ -67,6 +83,11 @@ const Analytics = () => {
     const getAnalysis = async () => {
       try {
         setLoading(true);
+        console.log("Sending data for analysis:", {
+          questions: interviewData.questions,
+          recordings: interviewData.recordings,
+          jobDescription: jobDescription
+        });
         
         // Make actual API call to backend
         const response = await interviewAPI.analyzeInterview({
@@ -74,6 +95,8 @@ const Analytics = () => {
           recordings: interviewData.recordings,
           jobDescription: jobDescription
         });
+        
+        console.log("Analysis response:", response.data);
         
         if (!response.data || !response.data.overallScore) {
           throw new Error('Invalid analysis response from server');
@@ -83,6 +106,7 @@ const Analytics = () => {
         setAnalysis(response.data);
         setLoading(false);
       } catch (err) {
+        console.error("Analysis error:", err);
         setError('Failed to get analysis. Please try again later.');
         setLoading(false);
       }
@@ -143,30 +167,38 @@ const Analytics = () => {
         <div className="mb-6">
           <h2 className="text-xl font-semibold mb-2">Job Description</h2>
           <div className="bg-gray-50 p-4 rounded-lg">
-            <p className="text-gray-700">{jobDescription}</p>
+            <p className="text-gray-700">{jobDescription || "No job description provided"}</p>
           </div>
         </div>
         
         {/* Overall Score */}
         <div className="mb-8">
           <h2 className="text-xl font-semibold mb-2">Overall Performance</h2>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 flex-col md:flex-row">
             <div className="h-32 w-32 rounded-full bg-blue-50 border-4 border-blue-500 flex items-center justify-center">
               <span className="text-4xl font-bold text-blue-600">{analysis?.overallScore || 0}%</span>
             </div>
             <div className="flex-1">
               <h3 className="font-medium text-lg mb-2">Strengths:</h3>
               <ul className="list-disc list-inside text-green-700 mb-4">
-                {analysis?.strengths.map((strength, index) => (
-                  <li key={index}>{strength}</li>
-                ))}
+                {analysis?.strengths && analysis.strengths.length > 0 ? (
+                  analysis.strengths.map((strength, index) => (
+                    <li key={index}>{strength}</li>
+                  ))
+                ) : (
+                  <li>No specific strengths identified</li>
+                )}
               </ul>
               
               <h3 className="font-medium text-lg mb-2">Areas for Improvement:</h3>
               <ul className="list-disc list-inside text-amber-700">
-                {analysis?.weaknesses.map((weakness, index) => (
-                  <li key={index}>{weakness}</li>
-                ))}
+                {analysis?.weaknesses && analysis.weaknesses.length > 0 ? (
+                  analysis.weaknesses.map((weakness, index) => (
+                    <li key={index}>{weakness}</li>
+                  ))
+                ) : (
+                  <li>No specific areas for improvement identified</li>
+                )}
               </ul>
             </div>
           </div>
@@ -176,44 +208,54 @@ const Analytics = () => {
         <div className="mb-6">
           <h2 className="text-xl font-semibold mb-4">Question by Question Analysis</h2>
           
-          {analysis?.questionAnalysis.map((qa, index) => (
-            <div key={index} className="mb-6 border border-gray-200 rounded-lg overflow-hidden">
-              <div className="bg-gray-50 p-4 border-b border-gray-200">
-                <h3 className="font-medium"><strong>Question {qa.questionIndex + 1}</strong></h3>
-                <p className="text-gray-700">{qa.question}</p>
-              </div>
-              
-              <div className="p-4">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="font-medium"><strong>Performance Score:</strong></span>
-                  <span className={`px-3 py-1 rounded-full text-sm 
-                    ${qa.score >= 90 ? 'bg-green-100 text-green-800' : 
-                      qa.score >= 75 ? 'bg-blue-100 text-blue-800' : 
-                      'bg-amber-100 text-amber-800'}`}
-                  >
-                    {qa.score}%
-                  </span>
+          {analysis?.questionAnalysis && analysis.questionAnalysis.length > 0 ? (
+            analysis.questionAnalysis.map((qa, index) => (
+              <div key={index} className="mb-6 border border-gray-200 rounded-lg overflow-hidden">
+                <div className="bg-gray-50 p-4 border-b border-gray-200">
+                  <h3 className="font-medium"><strong>Question {(qa.questionIndex !== undefined ? qa.questionIndex + 1 : index + 1)}</strong></h3>
+                  <p className="text-gray-700">{qa.question || "Question not available"}</p>
                 </div>
                 
-                <div className="mb-2">
-                  <span className="font-medium"><strong>Feedback:</strong></span>
-                  <p className="text-gray-700">{qa.feedback}</p>
-                </div>
-                
-                <div>
-                  <span className="font-medium"><strong>Improvement Tips:</strong></span>
-                  <div className="text-gray-700 mt-1">
-                    {formatImprovementTips(qa.improvementTips).map((tip, i) => (
-                      <div key={i} className="mb-2">
-                        {i > 0 && <hr className="my-2 border-gray-200" />}
-                        <div dangerouslySetInnerHTML={{ __html: tip }} />
-                      </div>
-                    ))}
+                <div className="p-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-medium"><strong>Performance Score:</strong></span>
+                    <span className={`px-3 py-1 rounded-full text-sm 
+                      ${qa.score >= 90 ? 'bg-green-100 text-green-800' : 
+                        qa.score >= 75 ? 'bg-blue-100 text-blue-800' : 
+                        'bg-amber-100 text-amber-800'}`}
+                    >
+                      {qa.score || 0}%
+                    </span>
+                  </div>
+                  
+                  <div className="mb-2">
+                    <span className="font-medium"><strong>Feedback:</strong></span>
+                    <p className="text-gray-700">{qa.feedback || "No feedback available"}</p>
+                  </div>
+                  
+                  <div>
+                    <span className="font-medium"><strong>Improvement Tips:</strong></span>
+                    <div className="text-gray-700 mt-1">
+                      {qa.improvementTips ? (
+                        formatImprovementTips(qa.improvementTips).map((tip, i) => (
+                          <div key={i} className="mb-2">
+                            {i > 0 && <hr className="my-2 border-gray-200" />}
+                            <div dangerouslySetInnerHTML={{ __html: tip }} />
+                          </div>
+                        ))
+                      ) : (
+                        <p>No improvement tips available</p>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
+            ))
+          ) : (
+            <div className="bg-gray-50 p-4 rounded-lg text-center">
+              <p className="text-gray-700">No question analysis available</p>
             </div>
-          ))}
+          )}
         </div>
         
         {/* Action Buttons */}

@@ -11,7 +11,16 @@ const api = axios.create({
 });
 
 export const authAPI = {
-  login: (email, password) => api.post('/api/auth/login', { email, password }),
+  login: async (email, password) => {
+    try {
+      const response = await api.post('/api/auth/login', { email, password });
+      // console.log('API login response:', response);
+      return response;
+    } catch (error) {
+      console.error('API login error:', error);
+      throw error;
+    }
+  },
   signup: (userData) => api.post('/api/auth/signup', userData),
 };
 

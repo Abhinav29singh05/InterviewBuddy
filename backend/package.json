@@ -12,7 +12,8 @@
     "multer": "^1.4.5-lts.1",
     "nodemon": "^3.1.9",
     "openai": "^4.12.1",
-    "passport-local-mongoose": "^8.0.0"
+    "passport-local-mongoose": "^8.0.0",
+    "razorpay": "^2.9.6"
   },
   "name": "interview-simulator-backend",
   "version": "1.0.0",

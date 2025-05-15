@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
+import Loader from './Loader'
 import Navbar from './navbar'
 import Hero from './hero'
 import JobDescriptionUpload from './jobDescriptionUpload'
@@ -17,9 +18,11 @@ import Analytics from './Pages/analytics'
 import Privacy from './Pages/privacy'
 import Terms from './Pages/terms'
 import JobRoles from './Pages/jobRoles'
+import PricingCard from './PricingCard'
 import FAQ from './Pages/faq'
 import ScrollToTop from './Components/ScrollToTop'
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './services/authContext';
 
 // Home component with all landing page sections
 const Home = () => {
@@ -30,7 +33,8 @@ const Home = () => {
       <JobDescriptionUpload/>
       <HowHelpful/>
       <GetSetUpskill/>
-      <FirstStep/>
+      <PricingCard/>
+      <FirstStep />
       <FeedbackPopup/>
       <Footer/>
     </>
@@ -38,8 +42,19 @@ const Home = () => {
 }
 
 function App() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 2000); // Simulate loading
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
+
   return (
-    <>
+    <AuthProvider>
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home/>} />
@@ -56,7 +71,7 @@ function App() {
         {/* Redirect all unknown routes to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </>
+    </AuthProvider>
   )
 }
 

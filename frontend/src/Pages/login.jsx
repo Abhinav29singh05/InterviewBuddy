@@ -4,14 +4,15 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { authAPI } from "../services/api";
+import { useAuth } from "../services/authContext";
+import Button from "../Button";
 
-
-import Button from "../button";
-const login = () => {
-
+const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
+    const { login } = useAuth();
     
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -21,32 +22,33 @@ const login = () => {
         else if(name === 'password'){
             setPassword(value);
         }
-        // console.log(name,value);
     };
-    const handleLogin = async (e) =>{
+
+    const handleLogin = async (e) => {
         e.preventDefault();
-        //Check if Data exist
-        if(email.length==0 || password.length==0){
+        if(email.length === 0 || password.length === 0){
             alert('All fields are required');
             return;
         }
-        try{
-            console.log("try")
+        try {
             const response = await authAPI.login(email, password);
-            // console.log('Login successful:', response.data);
-            navigate('/');
-        }catch (error) {
-            // Handle login error
-            // console.error('Login error:', error.response ? error.response.data : error.message);
+            // console.log('Login response:', response.data);
+            if (response.data && response.data.user) {
+                login(response.data.user);
+                // console.log('User data after login:', response.data.user);
+                navigate('/');
+            } else {
+                setError('Invalid response from server');
+            }
+        } catch (error) {
+            console.error('Login error:', error);
             setError(error.response?.data?.message || 'Login failed');
-            
         }
-    }
+    };
 
-    const navigate = useNavigate();
     return (
         <div className="flex m-0 p-0">
-            <div className="h-screen w-[65vw] flex justify-center items-center">
+            <div className="h-screen w-full flex justify-center items-center">
                 <div className="container flex flex-col justify-center items-center">
                     <div className="flex flex-col justify-center items-center ">
                         <h3 className="text-6xl font-bold pb-4">Login to Your Account</h3>
@@ -89,23 +91,36 @@ const login = () => {
                             className="mt-1 rounded-full"
                         />
                     </div>
+                    <div className="md:hidden text-center mb-4">
+                        <p className="text-lg">
+                            Create new Account?{' '}
+                            <span
+                                className="text-blue-600 underline cursor-pointer"
+                                onClick={() => navigate('/signup')}
+                            >
+                                Signup
+                            </span>
+                        </p>
+                    </div>
                 </div>
-                
             </div>
-            <div className="right h-screen w-[35vw] px-[5%] bg-gradient-to-br from-[#2C3E50] to-[#16A085] flex flex-col justify-center items-center">
+            <div className="right hidden md:flex h-screen w-[35vw] px-[5%] bg-gradient-to-br from-[#2C3E50] to-[#16A085] flex flex-col justify-center items-center">
                 <h3 className="text-6xl font-bold pb-4 text-white ">New Here?</h3>
                 <h5 className="text-lg text-white text-center">
                     Sign up and discover a great amount of new opportunities!</h5>
                 <Button 
-                children={"Sign Up"} 
-                onClick={()=>{navigate('/signup')}}
-                className={"rounded-full mt-4 bg-white text-[black] hover:bg-white"}/>
+                    children={"Sign Up"} 
+                    onClick={()=>{navigate('/signup')}}
+                    className={"rounded-full mt-4 text-black font-semibold "}
+                />
             </div>
-            <Button children={<FontAwesomeIcon icon={faXmark} />} 
-            onClick={()=>{navigate('/')}}
-            className={"absolute top-4 right-4 rounded-full text-2xl cursor-pointer"}/>
+            <Button 
+                children={<FontAwesomeIcon icon={faXmark} />} 
+                onClick={()=>{navigate('/')}}
+                className={"absolute top-4 right-4 rounded-full text-2xl cursor-pointer"}
+            />
         </div>
-    )
-}
+    );
+};
 
-export default login
+export default Login;

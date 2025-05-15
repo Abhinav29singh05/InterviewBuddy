@@ -15,16 +15,6 @@ nav {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 100%;
-    overflow: hidden;
-}
 
 .logo {
     font-size: 2.2rem;
@@ -35,7 +25,6 @@ nav {
 }
 
 .nav-links {
-    display: flex;
     gap: 2rem;
 }
 

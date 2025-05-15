@@ -7,10 +7,10 @@ const footer = () =>{
     const navigate = useNavigate();
     return (
         <footer className="flex flex-col justify-center items-center  p-12 ">
-            <div className="text-[#34495E]  flex space-x-16">
+            <div className="text-[#34495E]  flex flex-col md:flex-row md:space-x-8 space-y-4 md:space-y-0 text-center items-center ">
                 {/* <a href="">Contact Us</a> */}
                 <NavLink to="/contact">Contact Us</NavLink>
-                <a href="">Support & How-to Videos</a>
+                <NavLink to="/">Support & How-to Videos</NavLink>
                 <NavLink to="/job-roles">Popular Job Roles</NavLink>
                 <NavLink to="/privacy">Privacy Policy</NavLink>
                 <NavLink to="/terms">Terms of Service</NavLink>
@@ -22,7 +22,7 @@ const footer = () =>{
                 <FontAwesomeIcon className='text-2xl' icon={faLinkedin} />
                 <FontAwesomeIcon className='text-2xl' icon={faInstagram} />
             </div>
-            <div className="mt-12 text-sm">
+            <div className="mt-12 text-xs sm:text-sm text-center">
                 <p>© 2025 Interview Buddy, All Rights Reserved. | Lucknow, Uttar Pradesh, IN 226017</p>
             </div>
         </footer>

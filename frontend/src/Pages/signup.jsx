@@ -131,18 +131,20 @@ const Signup = () => {
             onClick={()=>{navigate('/')}}
             className={"absolute top-4 left-4 rounded-full text-2xl cursor-pointer"}/>
             {/* Left Section - Login CTA */}
-            <div className="left h-screen  px-[5%] bg-gradient-to-br from-[#16A085] to-[#2C3E50] flex flex-col justify-center items-center">
+            <div className="left h-screen px-[5%] bg-gradient-to-br from-[#16A085] to-[#2C3E50] hidden md:flex flex-col justify-center items-center">
                 <h3 className="text-6xl font-bold pb-4 text-white">Welcome Back!</h3>
                 <h5 className="text-lg text-white text-center">
-                    Already have an account? Login to continue your journey!</h5>
+                    Already have an account? Login to continue your journey!
+                </h5>
                 <Button 
-                children={"Login"} 
-                className={"rounded-full mt-4 bg-white text-[black] hover:bg-white"}
-                onClick={()=>{navigate('/login')}}/>
+                    children={"Login"} 
+                    className="rounded-full mt-4  text-black font-semibold "
+                    onClick={() => navigate('/login')}
+                />
             </div>
 
             {/* Right Section - Sign Up Form */}
-            <div className="h-screen w-[65vw] flex justify-center items-center">
+            <div className="h-screen w-full flex justify-center items-center">
                 <div className="container flex flex-col justify-center items-center">
                     {/* Header Section */}
                     <div className="flex flex-col justify-center items-center ">
@@ -238,6 +240,17 @@ const Signup = () => {
                             onClick={handleSubmit} 
                             className="mt-1 rounded-full"
                         />
+                    </div>
+                    <div className="md:hidden text-center mb-4">
+                        <p className="text-lg">
+                            Already have an account?{' '}
+                            <span
+                                className="text-blue-600 underline cursor-pointer"
+                                onClick={() => navigate('/login')}
+                            >
+                                Login
+                            </span>
+                        </p>
                     </div>
                 </div>
             </div>

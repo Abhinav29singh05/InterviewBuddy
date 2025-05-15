@@ -1,8 +1,8 @@
 import magzine from "./assets/magzine.png"
-import Button from "./button"
+import Button from "./Button.jsx"
 import { useNavigate } from "react-router-dom"
 
-const firstStep = () => {
+const FirstStep = () => {
     const navigate = useNavigate();
     const scrollToJobDescription = () => {
         // Find the job description element
@@ -21,19 +21,32 @@ const firstStep = () => {
         }
     };
     return (
-        <div className="flex justify-center items-center flex-wrap py-[7rem] px-[]">
-            <div>
-                <h3 className="text-5xl font-semibold max-w-2xl mb-4 pb-[1rem] text-[#4A3D2A]">Take the first step towards your dream job</h3>
-                <p className="text-lg max-w-[35rem] text-[#4A3D2A]">Join our platform for free today. With our freemium plan, you can start practicing and improving your skills immediately.</p>
-                <Button children={"Give your First Interview"} 
-                onClick={scrollToJobDescription}
-                className={"mt-4 rounded-lg"}/>
-            </div>
-            <div>
-                <img src={magzine} alt="magzine" className="w-[35rem] h-[25rem] ml-[-2rem] shadow-xl shadow-black/35 rounded-lg" />
+        <div className="w-full px-4 sm:px-6 py-12 sm:py-16 lg:py-20 ">
+            <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 md:gap-12 ">
+                <div className="w-full md:w-1/2 text-center md:text-left ">
+                    <h3 className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-4 sm:mb-6 text-[#4A3D2A]">
+                        Take the first step towards your dream job
+                    </h3>
+                    <p className="text-base sm:text-lg text-[#4A3D2A] mb-6 sm:mb-8">
+                        Join our platform for free today. With our freemium plan, you can start practicing and improving your skills immediately.
+                    </p>
+                    <Button 
+                        onClick={scrollToJobDescription}
+                        className="text-base sm:text-lg font-medium rounded-lg"
+                    >
+                        Give your First Interview
+                    </Button>
+                </div>
+                <div className="w-full md:w-1/2 flex justify-center md:justify-end mt-8 md:mt-0">
+                    <img 
+                        src={magzine} 
+                        alt="Magazine" 
+                        className="w-full max-w-[400px] lg:max-w-[500px] h-auto rounded-lg shadow-lg" 
+                    />
+                </div>
             </div>
         </div>
-
     );
 }
-export default firstStep
+
+export default FirstStep
