@@ -1,4 +1,4 @@
-import './Navbar.css'
+import './navbar.css'
 import Button from './Button'
 import { useNavigate, useLocation } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
