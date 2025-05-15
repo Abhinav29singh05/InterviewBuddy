@@ -23,8 +23,6 @@ const razorpay = new Razorpay({
 // Middleware
 app.use(cors());
 app.use(express.json());
-
-// Add this before MongoDB connection attempt
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {

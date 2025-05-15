@@ -8,7 +8,7 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
  */
 router.post('/analyzeInterview', async (req, res) => {
     try {
-        console.log('Analysis request received:', new Date().toISOString());
+        // console.log('Analysis request received:', new Date().toISOString());
         const startTime = Date.now();
         
         const { questions, recordings, jobDescription } = req.body;
@@ -65,7 +65,7 @@ router.post('/analyzeInterview', async (req, res) => {
         
         try {
             // Before Gemini API call
-            console.log('Calling Gemini API:', new Date().toISOString(), 'Elapsed:', (Date.now() - startTime) + 'ms');
+            // console.log('Calling Gemini API:', new Date().toISOString(), 'Elapsed:', (Date.now() - startTime) + 'ms');
             
             // Call Gemini API for analysis
             const result = await model.generateContent(prompt);
@@ -115,9 +115,9 @@ router.post('/analyzeInterview', async (req, res) => {
                 // console.log('Final analysis being sent to frontend:', JSON.stringify(analysis, null, 2));
                 
                 // After Gemini API call
-                console.log('Gemini API response received:', new Date().toISOString(), 'Elapsed:', (Date.now() - startTime) + 'ms');
+                // console.log('Gemini API response received:', new Date().toISOString(), 'Elapsed:', (Date.now() - startTime) + 'ms');
                 
-                console.log('Analysis complete:', new Date().toISOString(), 'Total time:', (Date.now() - startTime) + 'ms');
+                // console.log('Analysis complete:', new Date().toISOString(), 'Total time:', (Date.now() - startTime) + 'ms');
                 return res.json(analysis);
             } catch (parseError) {
                 console.error('Error parsing Gemini response:', parseError);
