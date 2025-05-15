@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Button from "./Button.jsx"
+import Button from "./button.jsx"
 import { useNavigate } from "react-router-dom";
 import { ReactTyped } from "react-typed";
 
