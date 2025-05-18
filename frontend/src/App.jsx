@@ -23,6 +23,7 @@ import FAQ from './Pages/faq'
 import ScrollToTop from './Components/ScrollToTop'
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './services/authContext';
+import AskAI from './Pages/AskAI';
 
 // Home component with all landing page sections
 const Home = () => {
@@ -68,6 +69,7 @@ function App() {
         <Route path="/terms" element={<Terms/>} />
         <Route path="/job-roles" element={<JobRoles/>} />
         <Route path="/faq" element={<FAQ/>} />
+        <Route path="/ask-ai" element={<AskAI/>} />
         {/* Redirect all unknown routes to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

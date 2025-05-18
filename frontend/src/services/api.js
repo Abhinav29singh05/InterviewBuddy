@@ -2,6 +2,7 @@ import axios from 'axios';
 
 // Use environment variables with fallback to production URL
 const API_URL = import.meta.env.VITE_API_URL || 'https://your-vercel-backend-url.vercel.app';
+export const askAI = (question) => api.post('/api/services/ask-ai', { question });
 
 const api = axios.create({
   baseURL: API_URL,

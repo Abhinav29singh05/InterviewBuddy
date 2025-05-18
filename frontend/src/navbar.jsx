@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { Menu, X, User, LogOut } from 'lucide-react';
 import { useAuth } from './services/authContext';
+// import { askAI } from './services/api';
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -104,7 +105,9 @@ export default function Navbar() {
             >
               Home
             </NavLink>
-
+            <NavLink to="/ask-ai" onClick={closeMenu} className="...">
+                Ask AI
+            </NavLink>
             <a
               href="/#pricing"
               onClick={scrollToPricing}

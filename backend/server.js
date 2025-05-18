@@ -10,6 +10,7 @@ const interviewAnalyzerService = require('./services/InterviewAnalyzer');
 const Razorpay = require("razorpay")
 const crypto = require('crypto');
 // const audioTranscriptionService = require('./services/AudioTranscriptionService');
+const askAIService = require('./services/AskAI');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -63,7 +64,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/services', questionGeneratorService);
 app.use('/api/services', interviewAnalyzerService);
 // app.use('/api', audioTranscriptionService);
-
+app.use('/api/services', askAIService);
 // RazorPay Endpoints
 app.post('/razorpay', async(req, res) => {
   try {
