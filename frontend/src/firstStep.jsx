@@ -1,5 +1,5 @@
 import magzine from "./assets/magzine.png"
-import Button from "./Button.jsx"
+import Button from "./button.jsx"
 import { useNavigate } from "react-router-dom"
 
 const FirstStep = () => {
