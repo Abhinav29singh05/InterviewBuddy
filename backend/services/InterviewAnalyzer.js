@@ -21,7 +21,7 @@ router.post('/analyzeInterview', async (req, res) => {
         // console.log("Interview Analyzer API_KEY",API_KEY);
         const genAI = new GoogleGenerativeAI(API_KEY);
         const model = genAI.getGenerativeModel({
-            model: "gemini-2.0-flash",
+            model: "gemini-2.5-flash",
         });
         
         // console.log("Analyzing interview for job description:", jobDescription);
@@ -83,7 +83,7 @@ router.post('/analyzeInterview', async (req, res) => {
                 analysis = JSON.parse(cleanedText);
                 
                 // Validate the analysis object structure
-                if (!analysis.overallScore || !Array.isArray(analysis.strengths) || 
+                if (analysis.overallScore === undefined || !Array.isArray(analysis.strengths) ||
                     !Array.isArray(analysis.weaknesses) || !Array.isArray(analysis.questionAnalysis)) {
                     console.warn('Invalid analysis structure, attempting to fix...');
                     
@@ -185,7 +185,7 @@ router.post('/analyzeInterview', async (req, res) => {
     }
 });
 
-// Function to clean JSON stringl
+// Function to clean JSON string
 const cleanJsonString = (str) => {
   try {
     // Remove markdown code block markers if present
@@ -194,14 +194,24 @@ const cleanJsonString = (str) => {
     cleaned = cleaned.trim();
     // Remove any trailing commas in arrays or objects which are invalid JSON
     cleaned = cleaned.replace(/,\s*}/g, '}').replace(/,\s*]/g, ']');
-    
+
     // Check if the string is valid JSON by parsing and stringifying it
     const parsed = JSON.parse(cleaned);
     return JSON.stringify(parsed);
   } catch (error) {
+    // Try to extract JSON object from the text (gemini-2.5-flash may include thinking text)
+    const jsonMatch = str.match(/\{[\s\S]*"overallScore"[\s\S]*\}/);
+    if (jsonMatch) {
+      try {
+        let extracted = jsonMatch[0].replace(/,\s*}/g, '}').replace(/,\s*]/g, ']');
+        const parsed = JSON.parse(extracted);
+        return JSON.stringify(parsed);
+      } catch (e) {
+        // ignore
+      }
+    }
     console.error('Error cleaning JSON string:', error);
-    console.log('Original string:', str);
-    return str; // Return the original string and let the caller handle the error
+    return str;
   }
 };
 

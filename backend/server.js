@@ -17,8 +17,8 @@ const PORT = process.env.PORT || 8080;
 
 // Razorpay Configuration
 const razorpay = new Razorpay({
-    key_id: "rzp_test_TcSyaOAtIyo5U3",
-    key_secret: "g7Hnf5nuQx6VjtXofViykn0e"
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET
 });
 
 // Middleware
@@ -121,7 +121,7 @@ app.post('/verify', async(req, res) => {
 
     const sign = razorpay_order_id + "|" + razorpay_payment_id;
     const expectedSignature = crypto
-      .createHmac("sha256", "g7Hnf5nuQx6VjtXofViykn0e")
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
       .update(sign.toString())
       .digest("hex");
 
