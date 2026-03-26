@@ -41,7 +41,6 @@ const Login = () => {
                 setError('Invalid response from server');
             }
         } catch (error) {
-            console.error('Login error:', error);
             setError(error.response?.data?.message || 'Login failed');
         }
     };
@@ -85,11 +84,10 @@ const Login = () => {
                         {error && (
                             <div className="text-red-500">{error}</div>
                         )}
-                        <Button 
-                            children={"Login"}
-                            onClick={handleLogin} 
+                        <Button
+                            onClick={handleLogin}
                             className="mt-1 rounded-full"
-                        />
+                        >Login</Button>
                     </div>
                     <div className="md:hidden text-center mb-4">
                         <p className="text-lg">
@@ -104,21 +102,19 @@ const Login = () => {
                     </div>
                 </div>
             </div>
-            <div className="right hidden md:flex h-screen w-[35vw] px-[5%] bg-gradient-to-br from-[#2C3E50] to-[#16A085] flex flex-col justify-center items-center">
+            <div className="right hidden md:flex h-screen w-[35vw] px-[5%] bg-gradient-to-br from-[#2C3E50] to-[#16A085] flex-col justify-center items-center">
                 <h3 className="text-6xl font-bold pb-4 text-white ">New Here?</h3>
                 <h5 className="text-lg text-white text-center">
                     Sign up and discover a great amount of new opportunities!</h5>
-                <Button 
-                    children={"Sign Up"} 
+                <Button
                     onClick={()=>{navigate('/signup')}}
                     className={"rounded-full mt-4 text-black font-semibold "}
-                />
+                >Sign Up</Button>
             </div>
-            <Button 
-                children={<FontAwesomeIcon icon={faXmark} />} 
+            <Button
                 onClick={()=>{navigate('/')}}
                 className={"absolute top-4 right-4 rounded-full text-2xl cursor-pointer"}
-            />
+            ><FontAwesomeIcon icon={faXmark} /></Button>
         </div>
     );
 };

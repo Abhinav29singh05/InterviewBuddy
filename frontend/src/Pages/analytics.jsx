@@ -14,7 +14,6 @@ const formatImprovementTips = (tips) => {
   // Check if tips already contain numbered points (1., 2., etc.)
   // Added null/type checking to prevent "match is not a function" error
   if (typeof tipsStr === 'string' && tipsStr.match && tipsStr.match(/\d+\.\s+\*\*[^*]+\*\*/)) {
-    console.log("formatting");
     // Split by numbered points and filter empty entries
     const points = tipsStr.split(/(\d+\.\s+)/)
       .filter(point => point.trim())
@@ -53,19 +52,11 @@ const Analytics = () => {
   const questions = location.state?.questions || [];
   const jobDescription = location.state?.jobDescription || location.state?.interviewData?.jobDescription || "Please provide a job description";
   
-  // Log location state for debugging
-  useEffect(() => {
-    console.log("Location state:", location.state);
-    console.log("Interview data:", interviewData);
-    console.log("Questions:", questions);
-    console.log("Job description:", jobDescription);
-  }, [location, interviewData, questions, jobDescription]);
   
   // Fetch analysis from Gemini when component mounts
   useEffect(() => {
     // Check if we have interview data
     if (!interviewData) {
-      console.error("No interview data found");
       setError("No interview data found. Please complete an interview first.");
       setLoading(false);
       return;
@@ -73,7 +64,6 @@ const Analytics = () => {
 
     // Check if we have recordings
     if (!interviewData.recordings || interviewData.recordings.length === 0) {
-      console.error("No interview recordings found");
       setError("No interview recordings found. Please complete the interview questions.");
       setLoading(false);
       return;
@@ -83,11 +73,6 @@ const Analytics = () => {
     const getAnalysis = async () => {
       try {
         setLoading(true);
-        console.log("Sending data for analysis:", {
-          questions: interviewData.questions,
-          recordings: interviewData.recordings,
-          jobDescription: jobDescription
-        });
         
         // Make actual API call to backend
         const response = await interviewAPI.analyzeInterview({
@@ -96,9 +81,7 @@ const Analytics = () => {
           jobDescription: jobDescription
         });
         
-        console.log("Analysis response:", response.data);
-        
-        if (!response.data || !response.data.overallScore) {
+        if (!response.data || response.data.overallScore === undefined) {
           throw new Error('Invalid analysis response from server');
         }
         
@@ -106,7 +89,6 @@ const Analytics = () => {
         setAnalysis(response.data);
         setLoading(false);
       } catch (err) {
-        console.error("Analysis error:", err);
         setError('Failed to get analysis. Please try again later.');
         setLoading(false);
       }
